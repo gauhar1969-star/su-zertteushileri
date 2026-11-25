@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Су зерттеушілері — географиялық квест</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#173653;background:linear-gradient(135deg,#dff7fb,#e7edff 55%,#e0f5e9);min-height:100vh}
+header{background:linear-gradient(115deg,#0b315b,#087e9c);color:white;text-align:center;padding:22px 15px;box-shadow:0 5px 18px #1235}
+header .emoji{font-size:34px}h1{font-size:clamp(24px,4vw,37px);margin:5px 0}header p{margin:5px 0;font-size:15px}
+main{max-width:920px;margin:22px auto;padding:0 14px}.panel{background:#ffffffed;border:1px solid #c6e4ef;border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:0 12px 30px #17476b20}
+.stats{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.pill{background:#e8f5fc;color:#155b83;border-radius:30px;padding:9px 14px;font-weight:bold}
+.progress{height:11px;background:#e5edf3;border-radius:20px;overflow:hidden;margin:15px 0 23px}.bar{height:100%;width:0;background:linear-gradient(90deg,#20b4a5,#2778cf);transition:.3s}
+.tag{font-size:13px;text-transform:uppercase;letter-spacing:1px;font-weight:bold;color:#11839a}h2{font-size:clamp(21px,3vw,28px);margin:8px 0 12px;color:#123d66}
+.context{background:#edf7fc;border-left:5px solid #25a6b8;padding:14px 16px;border-radius:10px;line-height:1.5;margin:14px 0}
+.q{font-size:clamp(18px,2.4vw,21px);font-weight:bold;line-height:1.45;margin:17px 0}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:11px}.opt{border:2px solid #cbdfea;background:#f4f9fd;border-radius:13px;padding:15px;text-align:left;color:#193f5e;font-size:16px;font-weight:600;min-height:66px;cursor:pointer;transition:.15s}
+.opt:hover{background:#e3f3fb;transform:translateY(-2px)}.opt:disabled{cursor:default;opacity:1}.opt.good{background:#ddf7e8;border-color:#2aaa70;color:#125b3a}.opt.bad{background:#ffe6e2;border-color:#dc6b61;color:#8a2e28}
+.feedback{min-height:62px;background:#f0f5f8;padding:13px 15px;border-radius:12px;margin-top:16px;line-height:1.45}
+.actions{display:flex;justify-content:flex-end;margin-top:15px}.btn{border:0;border-radius:12px;padding:13px 22px;font-size:16px;font-weight:bold;cursor:pointer}.primary{color:white;background:linear-gradient(110deg,#087eae,#174fa0);box-shadow:0 5px 12px #145c9430}.primary:disabled{opacity:.4;cursor:not-allowed}
+.hidden{display:none}.result{text-align:center}.score{font-size:58px;color:#087ca8;font-weight:800;margin:10px}.stars{font-size:32px;letter-spacing:5px}.note{font-size:14px;color:#557187}
+footer{text-align:center;color:#557187;font-size:13px;padding:18px}
+@media(max-width:620px){.options{grid-template-columns:1fr}.opt{min-height:55px}}
+</style></head>
+<body>
+<header><div class="emoji">🧭 🌊 🧊</div><h1>СУ ЗЕРТТЕУШІЛЕРІ</h1><p>Қазақстанның ішкі сулары • Географиялық зерттеу квесті • 9-сынып</p></header>
+<main>
+<section class="panel" id="game">
+ <div class="stats"><span class="pill" id="step">1 / 5 тапсырма</span><span class="pill">⭐ Ұпай: <b id="score">0</b> / 5</span></div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <div class="tag" id="tag">Зерттеу 1 • Өзендер</div><h2 id="heading">Өзеннің су режимін анықта</h2>
+ <div class="context" id="context"></div><div class="q" id="question"></div>
+ <div class="options" id="options"></div><div class="feedback" id="feedback">Жағдаятты мұқият оқып, ең дәл жауапты таңда. Әр тапсырма — 1 балл.</div>
+ <div class="actions"><button class="btn primary" id="next" disabled>Келесі тапсырма →</button></div>
+</section>
+<section class="panel result hidden" id="result"><div style="font-size:54px">🏅</div><h2>Зерттеу аяқталды!</h2><div class="score" id="final">0 / 5</div><div class="stars" id="stars"></div><h2 id="comment"></h2><p id="details"></p><button class="btn primary" onclick="restart()">Қайта орындау ↻</button></section>
+</main>
+<footer>Оқу мақсаты: 9.3.3.1 • Топтастыру, көрсеткіштерін талдау және сипаттау</footer>
+<script>
+const data=[
+{tag:"Зерттеу 1 • Өзендер",head:"Өзеннің су режимін анықта",ctx:"Жағдаят: Солтүстік және Орталық Қазақстанның жазық бөлігіндегі өзенде су деңгейі көктемде күрт көтеріліп, жаздың соңында төмендейді. Қыста өзен мұз құрсанады.",q:"Өзеннің мұндай су режимін қалыптастыратын негізгі себеп қандай?",a:["Көктемгі қардың жаппай еруі","Жазғы муссондық жаңбырлар","Мұздықтардың жыл бойы бірқалыпты еруі","Теңіз толқындарының әсері"],c:0,why:"Дұрыс! Жазық өзендердің көпшілігі қар суымен қоректенеді. Қар көктемде еріп, су тасуын туғызады."},
+{tag:"Зерттеу 2 • Көлдер",head:"Көл суының қасиетін салыстыр",ctx:"Географ Балқаш көлінің батыс бөлігінен тұщыға жақын, ал шығыс бөлігінен тұздылау су сынамасын алды. Екі бөлікті Ұзынарал бұғазы жалғастырады.",q:"Бұл айырмашылықты ең дұрыс түсіндіретін тұжырымды таңда.",a:["Көлдің батысы терең, шығысы таяз болғандықтан","Іле өзені батыс бөлікке мол тұщы су әкеледі, ал шығыс бөлікте булану мен су алмасу ерекшелігі әсер етеді","Шығыс бөлікке мұздықтар ғана су береді","Көлдің екі бөлігі бір-бірінен толық оқшауланған"],c:1,why:"Дұрыс! Іле өзені көлдің батысына мол тұщы су әкеледі. Ұзынарал маңындағы тар өткел су алмасуды шектеп, шығыс бөліктің тұздылығы жоғарылауына ықпал етеді."},
+{tag:"Зерттеу 3 • Мұздықтар",head:"Мұздық пен өзен байланысын түсіндір",ctx:"Іле Алатауындағы жазда ауа температурасы жоғарылаған кезде тау өзендерінің суы көбейеді. Бұл өзендердің бастауларының бір бөлігі мұздықтармен байланысты.",q:"Мұздықтардың өзен ағыны үшін маңызы қандай?",a:["Қыста жауын-шашынды тоқтатады","Жазда еріген су арқылы өзендерді қоректендіреді","Өзен суының тұздылығын міндетті түрде арттырады","Жерасты суының қозғалысын толық тоқтатады"],c:1,why:"Дұрыс! Жазда мұздықтардың еруі тау өзендерінің қоректенуіне үлес қосады. Мұздықтар — тұщы судың маңызды табиғи қоры."},
+{tag:"Зерттеу 4 • Мәңгі тоң",head:"Мәңгі тоң таралуын анықта",ctx:"Қазақстанның биік таулы аймақтарында жердің кейбір қабаттары ұзақ уақыт бойы қатқан күйде жатады. Бұл құбылыс жер бедері мен климат жағдайына тәуелді.",q:"Мәңгі тоңның қалыптасуына ең қолайлы жағдай қай жерде?",a:["Жазы өте ыстық шөлді ойпаттарда","Биік таулардың суық белдеулерінде","Каспий маңының жылы жағалауында","Өзен аңғарларының төменгі ағысында"],c:1,why:"Дұрыс! Биіктеген сайын ауа температурасы төмендейді. Сондықтан мәңгі тоң Қазақстанның биік таулы белдеулерінде кездеседі."},
+{tag:"Зерттеу 5 • Жерасты сулары",head:"Жерасты суын тиімді пайдалан",ctx:"Ауыл маңында су өткізбейтін екі қабаттың арасында қысыммен жатқан су қоры анықталды. Ұңғыма бұрғыланғанда су жоғары көтеріледі.",q:"Сипатталған жерасты суының түрін анықта және оның ерекшелігін таңда.",a:["Грунт суы — жер бетіне ең жақын, қысымсыз су","Артезиан суы — су өткізбейтін қабаттар арасында қысыммен жатады","Мұздық суы — тау мұзында сақталады","Өзен суы — жер бетімен ағады"],c:1,why:"Дұрыс! Артезиан суы су өткізбейтін қабаттардың арасында қысыммен жатады. Ұңғыма арқылы жоғары көтерілуі мүмкін."}
+];
+let i=0,points=0,locked=false;const el=id=>document.getElementById(id);
+function sound(ok){try{let a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=ok?700:190;g.gain.value=.07;o.start();o.stop(a.currentTime+.15)}catch(e){}}
+function draw(){locked=false;let t=data[i];el("step").textContent=(i+1)+" / 5 тапсырма";el("score").textContent=points;el("bar").style.width=(i/5*100)+"%";el("tag").textContent=t.tag;el("heading").textContent=t.head;el("context").textContent=t.ctx;el("question").textContent=t.q;el("feedback").textContent="Жағдаятты мұқият оқып, ең дәл жауапты таңда. Әр тапсырма — 1 балл.";el("feedback").style.background="#f0f5f8";el("next").disabled=true;el("next").textContent=i===4?"Нәтижені көру →":"Келесі тапсырма →";el("options").innerHTML="";
+t.a.forEach((s,n)=>{let b=document.createElement("button");b.className="opt";b.textContent=String.fromCharCode(65+n)+". "+s;b.onclick=()=>answer(n);el("options").appendChild(b)})}
+function answer(n){if(locked)return;locked=true;let t=data[i],ok=n===t.c;[...el("options").children].forEach((b,k)=>{b.disabled=true;if(k===t.c)b.classList.add("good");else if(k===n)b.classList.add("bad")});if(ok){points++;el("feedback").textContent="✅ Дұрыс! +1 балл. "+t.why;el("feedback").style.background="#e3f8eb";sound(true)}else{el("feedback").textContent="↪ Дұрыс жауап: "+t.a[t.c]+". "+t.why;el("feedback").style.background="#fff0e9";sound(false)}el("score").textContent=points;el("next").disabled=false}
+el("next").onclick=()=>{if(i<4){i++;draw()}else finish()};
+function finish(){el("game").classList.add("hidden");el("result").classList.remove("hidden");el("final").textContent=points+" / 5";el("stars").textContent="★".repeat(points)+"☆".repeat(5-points);let c=["Қайталап көр! Түсіндірмелерге назар аудар.","Жақсы бастама! Біліміңді толықтыр.","Жақсы нәтиже! Географиялық талдауды жалғастыр.","Өте жақсы! Тақырыпты жақсы меңгергенсің.","Керемет! Географиялық байланыстарды түсінесің.","Тамаша! Сен нағыз су зерттеушісісің!"];el("comment").textContent=c[points];el("details").textContent=points>=4?"Сен өзен, көл, мұздық, мәңгі тоң және жерасты суларының ерекшеліктерін талдай алдың.":"Қате кеткен тапсырмалардың түсіндірмелерін оқып, ішкі сулардың ерекшеліктерін қайтала.";el("bar").style.width="100%"}
+function restart(){i=0;points=0;el("result").classList.add("hidden");el("game").classList.remove("hidden");draw()}draw();
+</script></body></html>
